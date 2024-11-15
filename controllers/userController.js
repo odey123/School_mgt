@@ -1,6 +1,6 @@
-const userService = require('../services/userService');  // Make sure the import is lowercase to match the service file
+const userService = require('../services/userService');
 
-const { generateToken } = require('../utils/auth');  // Ensure this is correctly importing the token generation utility
+const { generateToken } = require('../utils/auth');  
 
 const UserController = {
   async createUser(req, res) {

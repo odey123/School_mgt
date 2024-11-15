@@ -34,4 +34,6 @@ const UserSchema = new mongoose.Schema({
   expertise: String
 });
 
-module.exports = mongoose.model('User', UserSchema);
+const User = mongoose.models.user || mongoose.model('user', UserSchema);
+
+module.exports = User;
