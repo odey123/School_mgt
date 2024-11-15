@@ -1,6 +1,6 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
-const Position = require('../models/Position');
+const Position = require('../models/position');
 const { hashPassword, comparePassword, generateToken } = require('../utils/auth');
 
 const UserService = {

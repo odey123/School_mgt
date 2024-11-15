@@ -8,5 +8,7 @@ const PositionSchema = new mongoose.Schema({
   course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' } // Reference to Course schema
 });
 
-module.exports = mongoose.model('Position', PositionSchema);
+const Position = mongoose.models.user || mongoose.model('position', PositionSchema);
+
+module.exports = Position;
  
