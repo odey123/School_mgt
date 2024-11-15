@@ -18,6 +18,30 @@ app.use('/users', userRoutes);
 app.use('/auth', authRoutes)
 app.use('/course', courseRoutes)
 
+// Default route for a welcoming message
+app.get('/', (req, res) => {
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Welcome</title>
+            <style>
+                body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; background-color: #f9f9f9; }
+                h1 { color: #007BFF; }
+                p { color: #555; font-size: 1.2em; }
+            </style>
+        </head>
+        <body>
+            <h1>Welcome to the School Management System!</h1>
+            <p>Manage your school operations effortlessly and efficiently.</p>
+        </body>
+        </html>
+    `);
+});
+
+
 startServer = async () => {
     try {
         await connectDB();
@@ -29,5 +53,7 @@ startServer = async () => {
         process.exit(1);
     }
 };
+
+
 
 startServer();

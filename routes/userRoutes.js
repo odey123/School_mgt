@@ -1,9 +1,7 @@
 const express = require('express');
 const authMiddleware = require('../middlewares/authMiddleware').authMiddleware;
 const isRevoked = require('../middlewares/authMiddleware').isRevoked;
-const authController = require('../controllers/authController');
 const userController = require('../controllers/userController');
-const courseController = require('../controllers/courseController');
 const router = express.Router();
 
 

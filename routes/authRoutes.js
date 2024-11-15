@@ -9,6 +9,6 @@ router.post('/login', authController.login);
 router.post('/register', authController.register);
 
 // allows user to change their password
-router.post('/change_password', authController.changePassword);
+router.patch('/change_password', authController.changePassword);
 
 module.exports = router;

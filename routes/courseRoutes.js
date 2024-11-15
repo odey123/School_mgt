@@ -7,10 +7,10 @@ const { authMiddleware, isRevoked } = require('../middlewares/authMiddleware'); 
 router.post('/registercourse', authMiddleware, isRevoked,  courseController.createCourse);
 
 // Get all courses
-router.get('/', authMiddleware, courseController.getCourses);
+router.get('/', courseController.getCourses);
 
 // Get a single course by ID
-router.get('/:id', authMiddleware, courseController.getCourseById);
+router.get('/:id', courseController.getCourseById);
 
 // Update a course by ID (Admin only)
 router.patch('/:id', authMiddleware, isRevoked, courseController.updateCourse);

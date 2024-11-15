@@ -1,74 +1,60 @@
-const bcrypt = require('bcrypt');
-const User = require('../models/user'); 
-const jwt = require('jsonwebtoken'); 
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('../models/user');  // Example, you can replace with your user model.
 
+const authService = {
+    async register(userData) {
+        const { email, password, username } = userData;
+        
+        // Check if the user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            throw new Error('User already exists');
+        }
 
-const hashPassword = async (password) => await bcrypt.hash(password, 10);
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
 
+        // Create a new user
+        const newUser = new User({ email, password: hashedPassword, username });
 
-const comparePassword = async (password, hashedPassword) => await bcrypt.compare(password, hashedPassword);
-
-
-const generateToken = (user) => {
-    return jwt.sign(
-        { 
-            id: user._id, 
-            email: user.email, 
-            isAdmin: user.isAdmin 
-        }, 
-        'your_jwt_secret_key', 
-        { expiresIn: '2d' } 
-    );
-};
-
-const AuthService = {
-    
-    async register(data) {
-        const existingUser = await User.findOne({ email: data.email });
-        if (existingUser) throw new Error('User with this email already exists.');
-
-        data.password = await hashPassword(data.password);
-        const newUser = new User(data);
-        return await newUser.save();
+        // Save the new user to the database
+        await newUser.save();
+        return newUser;
     },
 
-    // Login user and return token
     async login(email, password) {
         const user = await User.findOne({ email });
-        if (!user) throw new Error('User not found');
+        if (!user) {
+            throw new Error('Invalid credentials');
+        }
 
-        const isPasswordValid = await comparePassword(password, user.password);
-        if (!isPasswordValid) throw new Error('Invalid credentials');
+        const validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword) {
+            throw new Error('Invalid credentials');
+        }
 
-        const token = generateToken(user);
+        // Generate JWT token
+        const token = jwt.sign({ userId: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
+
         return { token, message: 'Login successful' };
     },
 
-    // Change user password
     async changePassword(userId, newPassword) {
-        const hashedPassword = await hashPassword(newPassword);
-        const updatedUser = await User.findByIdAndUpdate(userId, { password: hashedPassword }, { new: true });
-        
-        if (!updatedUser) throw new Error('User not found');
-        
-        return updatedUser;
-    },
-
-    // Create a new user
-    async createUser(data) {
-        if (data.password) {
-            data.password = await hashPassword(data.password);
+        const user = await User.findById(userId);
+        if (!user) {
+            throw new Error('User not found');
         }
-        const newUser = new User(data);
-        return await newUser.save();
-    },
 
-    // Get user by ID
-    async getUserById(id) {
-        const user = await User.findById(id);
-        if (!user) throw new Error('User not found');
+        // Hash the new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        // Update the user's password
+        user.password = hashedPassword;
+        await user.save();
+
         return user;
     }
 };
 
-module.exports = AuthService;
+module.exports = authService;
