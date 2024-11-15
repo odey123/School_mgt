@@ -9,4 +9,5 @@ const CourseSchema = new mongoose.Schema({
   status: { type: String, enum: Status, default: 'normal' }
 });
 
-module.exports = mongoose.model('Course', CourseSchema);
+const Course = mongoose.models.user || mongoose.model('course', CourseSchemaSchema);
+module.exports = Course

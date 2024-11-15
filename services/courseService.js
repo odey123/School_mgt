@@ -1,6 +1,6 @@
 // services/courseService.js
 
-const Course = require('../models/Course'); // Import the Course model
+const Course = require('../models/course'); // Import the Course model
 const { Status } = require('../enums'); // Assuming Status enum is in enums.js
 
 const CourseService = {
