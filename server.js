@@ -8,7 +8,7 @@ const userRoutes = require('./routes/userRoutes')
 const authRoutes = require('./routes/authRoutes')
 const courseRoutes = require('./routes/courseRoutes')
 
-const PORT = 5000
+const PORT = process.env.PORT || 5000;
 app.use(cors())
 app.use(express.json())
 app.options('*', cors())
